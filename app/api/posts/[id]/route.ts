@@ -16,16 +16,70 @@ const getUserIdFromToken = (request: NextRequest): string | null => {
 };
 
 // GET A SINGLE POST (PUBLIC)
+// export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+//   try {
+//     await connect();
+//     const post = await Post.findOne({ _id: params.id });
+//     if (!post) return NextResponse.json({ message: "Post not found." }, { status: 404 });
+//     return NextResponse.json({ post });
+//   } catch (error) {
+//     return NextResponse.json({ message: "An error occurred while fetching the post." }, { status: 500 });
+//   }
+// }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+  const { id } = params;
+  console.log(`[API START] GET /api/posts/${id}`);
+
+  // --- CRUCIAL DEBUG STEP ---
+  // Check if the environment variable is loaded on Vercel.
+  // We will only log a portion of it for security.
+  const mongoUri = process.env.MONGODB_URI;
+  if (mongoUri) {
+    console.log(`[API ENV] MONGODB_URI is present. Starts with: ${mongoUri.substring(0, 20)}...`);
+  } else {
+    console.error("[API ENV] CRITICAL ERROR: MONGODB_URI environment variable is NOT DEFINED on the server.");
+  }
+  // --- END DEBUG STEP ---
+
   try {
+    console.log("[API DB] Attempting to connect to the database...");
     await connect();
-    const post = await Post.findOne({ _id: params.id });
-    if (!post) return NextResponse.json({ message: "Post not found." }, { status: 404 });
-    return NextResponse.json({ post });
+    console.log("[API DB] Database connection successful.");
+
+    console.log(`[API QUERY] Searching for post with _id: ${id}`);
+    const post = await Post.findOne({ _id: id });
+
+    if (!post) {
+      console.log(`[API RESULT] Post with _id: ${id} was NOT found.`);
+      return NextResponse.json({ message: "Post not found." }, { status: 404 });
+    }
+
+    console.log(`[API RESULT] Successfully found post titled: "${post.title}"`);
+    return NextResponse.json({ post }, { status: 200 });
+
   } catch (error) {
-    return NextResponse.json({ message: "An error occurred while fetching the post." }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
+    console.error(`[API ERROR] An error occurred in the GET route for /api/posts/${id}:`, errorMessage);
+    console.error(error); 
+    
+    return NextResponse.json({ message: "An internal server error occurred.", error: errorMessage }, { status: 500 });
   }
 }
+
 
 // UPDATE A POST (SECURE, REQUIRES OWNERSHIP)
 export async function PUT(request: NextRequest, { params }: { params: { id: string } }) {

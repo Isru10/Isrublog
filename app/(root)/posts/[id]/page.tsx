@@ -21,8 +21,9 @@ const getPostById = async (id: string) => {
   const baseURL = process.env.VERCEL_URL
     ? `https://` + process.env.VERCEL_URL
     : 'http://localhost:3000';
-
+ 
   try {
+    console.log(baseURL)
     const res = await fetch(`${baseURL}/api/posts/${id}`, {
       cache: 'no-store', // Ensures you always get the latest post data
     });
