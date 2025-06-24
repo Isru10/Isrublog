@@ -24,3 +24,102 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+}
+h2{
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+h3{
+  font-size: 1.25rem;
+  font-weight: 500;
+}
+h4{
+  font-size:1rem;
+  font-weight: 400;
+}
+h5{
+  font-size: 0.875rem;
+  font-weight: 400;
+}
+h6{
+  font-size:0.75rem;
+  font-weight: 200;
+}
+ul{
+  list-style-type: disc;
+  margin-left: 1.5rem;
+}
+
+ul li{
+  margin-bottom: 0.5rem;
+}
+ol{
+  list-style-type: decimal;
+  margin-left: 1.5rem;
+}
+ol li {
+  margin-bottom: 0.5rem;
+}
+
+
+
+
+
+
+
+/* ... (All previous Tiptap and button styles remain the same) ... */
+
+.tiptap > * + * { @apply mt-4; }
+.tiptap ul, .tiptap ol { @apply px-6; }
+.tiptap h1, .tiptap h2, .tiptap h3 { line-height: 1.1; }
+.tiptap code { @apply bg-stone-700 text-white px-2 py-1 rounded-md; }
+.tiptap pre { @apply bg-stone-800 text-white font-mono text-sm p-4 rounded-md; }
+.tiptap pre code { @apply bg-transparent p-0; }
+.tiptap blockquote { @apply border-l-4 border-stone-400 pl-4 italic; }
+.tiptap hr { @apply border-t border-stone-400 my-4; }
+button { @apply p-1 rounded-md transition-colors duration-200; }
+.is-active { @apply bg-blue-500 text-white; }
+button:hover:not(.is-active) { @apply bg-gray-600; }
+.tiptap p[style*="text-align: center"] { @apply text-center; }
+
+/* --- UPDATE THIS SECTION --- */
+
+/* Base image style */
+.tiptap img {
+  max-width: 100%;
+  height: auto;
+  @apply rounded-md my-2;
+}
+
+/* Image alignment styles */
+.tiptap img[data-align="left"] {
+  @apply float-left mr-4;
+}
+.tiptap img[data-align="right"] {
+  @apply float-right ml-4;
+}
+.tiptap img[data-align="center"] {
+  @apply block mx-auto;
+}
+
+/* Image resizing styles */
+.tiptap img[data-size="small"] {
+  width: 25%;
+}
+.tiptap img[data-size="medium"] {
+  width: 50%;
+}
+.tiptap img[data-size="large"] {
+  width: 100%;
+}
+
+/* This is a utility to contain the floating elements */
+.tiptap p:has(img[data-align="left"]),
+.tiptap p:has(img[data-align="right"]) {
+  overflow: auto; /* A simple clearfix */
+}
