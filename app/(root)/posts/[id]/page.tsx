@@ -23,7 +23,7 @@ const getPostById = async (id: string) => {
     : 'http://localhost:3000';
 
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/${id}`, {
+    const res = await fetch(`${baseURL}/api/posts/${id}`, {
       cache: 'no-store', // Ensures you always get the latest post data
     });
 
