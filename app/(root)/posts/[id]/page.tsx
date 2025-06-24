@@ -1,6 +1,9 @@
 import Navbar from '@/component/Navbar';
 import DOMPurify from 'isomorphic-dompurify';
 
+
+export const dynamic = 'force-dynamic';
+
 // 1. Define an interface for the page's props. This is the main fix.
 interface PageProps {
   params: {
@@ -24,9 +27,7 @@ const getPostById = async (id: string) => {
  
   try {
     console.log(baseURL)
-    const res = await fetch(`${baseURL}/api/posts/${id}`, {
-      cache: 'no-store', // Ensures you always get the latest post data
-    });
+    const res = await fetch(`${baseURL}/api/posts/${id}`);
 
     if (!res.ok) {
       return null;
