@@ -6,7 +6,7 @@ const getPostById = async (id: string) => {
     ? `https://` + process.env.VERCEL_URL
     : 'http://localhost:3000';
 
-    const res = await fetch(`${baseURL}/api/posts/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/posts/${id}`, {
       cache: 'no-store',
     });
 
