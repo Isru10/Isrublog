@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import connect from "@/lib/db";
 import Post from "@/lib/models/post";
+import { Types } from "mongoose";
 
 // Helper to get user ID from token
 const getUserIdFromToken = (request: NextRequest): string | null => {
@@ -61,7 +62,15 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     console.log("[API DB] Database connection successful.");
 
     console.log(`[API QUERY] Searching for post with _id: ${id}`);
-    const post = await Post.findOne({ _id: id });
+    // const post = await Post.findOne({ _id: id });
+
+
+
+    if (!Types.ObjectId.isValid(id)) {
+      return NextResponse.json({ message: "Invalid post ID" }, { status: 400 });
+    }
+    const post = await Post.findById(id); // Much cleaner and uses real ObjectId
+    
 
     if (!post) {
       console.log(`[API RESULT] Post with _id: ${id} was NOT found.`);
