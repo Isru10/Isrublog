@@ -26,7 +26,7 @@ const getPostById = async (id: string) => {
     : 'http://localhost:3000';
  
   try {
-    console.log(baseURL)
+    console.log('this is base urllllllllllll:    '+`${baseURL}/api/posts/${id}`)
     const res = await fetch(`${baseURL}/api/posts/${id}`);
 
     if (!res.ok) {

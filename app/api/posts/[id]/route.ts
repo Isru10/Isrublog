@@ -16,19 +16,6 @@ const getUserIdFromToken = (request: NextRequest): string | null => {
     }
 };
 
-// GET A SINGLE POST (PUBLIC)
-// export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
-//   try {
-//     await connect();
-//     const post = await Post.findOne({ _id: params.id });
-//     if (!post) return NextResponse.json({ message: "Post not found." }, { status: 404 });
-//     return NextResponse.json({ post });
-//   } catch (error) {
-//     return NextResponse.json({ message: "An error occurred while fetching the post." }, { status: 500 });
-//   }
-// }
-
-
 
 
 
@@ -42,15 +29,9 @@ const getUserIdFromToken = (request: NextRequest): string | null => {
 
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   const { id } = params;
-
-  // --- THIS IS THE FIX ---
-  // A "Guard Clause" to check if the ID is a valid MongoDB ObjectId.
-  // If it's not a valid format, Mongoose will crash. We prevent that here.
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return NextResponse.json({ message: "Invalid post ID format." }, { status: 400 });
   }
-  // --- END OF FIX ---
-
   try {
     await connect();
     const post = await Post.findOne({ _id: id });
@@ -62,8 +43,6 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     return NextResponse.json({ post }, { status: 200 });
 
   } catch (error) {
-    // This catch block will now only handle true server/database errors,
-    // not bad ID formats.
     console.error(`API Error fetching post ${id}:`, error);
     return NextResponse.json({ message: "An internal server error occurred." }, { status: 500 });
   }
