@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import connect from "@/lib/db";
 import Post from "@/lib/models/post";
-import { Types } from "mongoose";
+import mongoose, { Types } from "mongoose";
 
 // Helper to get user ID from token
 const getUserIdFromToken = (request: NextRequest): string | null => {
@@ -40,52 +40,32 @@ const getUserIdFromToken = (request: NextRequest): string | null => {
 
 
 
-
 export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
   const { id } = params;
-  console.log(`[API START] GET /api/posts/${id}`);
 
-  // --- CRUCIAL DEBUG STEP ---
-  // Check if the environment variable is loaded on Vercel.
-  // We will only log a portion of it for security.
-  const mongoUri = process.env.MONGODB_URI;
-  if (mongoUri) {
-    console.log(`[API ENV] MONGODB_URI is present. Starts with: ${mongoUri.substring(0, 20)}...`);
-  } else {
-    console.error("[API ENV] CRITICAL ERROR: MONGODB_URI environment variable is NOT DEFINED on the server.");
+  // --- THIS IS THE FIX ---
+  // A "Guard Clause" to check if the ID is a valid MongoDB ObjectId.
+  // If it's not a valid format, Mongoose will crash. We prevent that here.
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return NextResponse.json({ message: "Invalid post ID format." }, { status: 400 });
   }
-  // --- END DEBUG STEP ---
+  // --- END OF FIX ---
 
   try {
-    console.log("[API DB] Attempting to connect to the database...");
     await connect();
-    console.log("[API DB] Database connection successful.");
-
-    console.log(`[API QUERY] Searching for post with _id: ${id}`);
-    // const post = await Post.findOne({ _id: id });
-
-
-
-    if (!Types.ObjectId.isValid(id)) {
-      return NextResponse.json({ message: "Invalid post ID" }, { status: 400 });
-    }
-    const post = await Post.findById(id); // Much cleaner and uses real ObjectId
-    
+    const post = await Post.findOne({ _id: id });
 
     if (!post) {
-      console.log(`[API RESULT] Post with _id: ${id} was NOT found.`);
       return NextResponse.json({ message: "Post not found." }, { status: 404 });
     }
 
-    console.log(`[API RESULT] Successfully found post titled: "${post.title}"`);
     return NextResponse.json({ post }, { status: 200 });
 
   } catch (error) {
-    const errorMessage = error instanceof Error ? error.message : "An unknown error occurred";
-    console.error(`[API ERROR] An error occurred in the GET route for /api/posts/${id}:`, errorMessage);
-    console.error(error); 
-    
-    return NextResponse.json({ message: "An internal server error occurred.", error: errorMessage }, { status: 500 });
+    // This catch block will now only handle true server/database errors,
+    // not bad ID formats.
+    console.error(`API Error fetching post ${id}:`, error);
+    return NextResponse.json({ message: "An internal server error occurred." }, { status: 500 });
   }
 }
 
