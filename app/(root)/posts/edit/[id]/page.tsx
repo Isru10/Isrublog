@@ -2,11 +2,11 @@ import EditPostForm from "@/component/EditPostForm";
 
 const getPostById = async (id: string) => {
   try {
-    const baseURL = process.env.VERCEL_URL
-    ? `https://` + process.env.VERCEL_URL
-    : 'http://localhost:3000';
+    // const baseURL = process.env.VERCEL_URL
+    // ? `https://` + process.env.VERCEL_URL
+    // : 'http://localhost:3000';
 
-    const res = await fetch(`${baseURL}/api/posts/${id}`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/${id}`, {
       cache: 'no-store',
     });
 

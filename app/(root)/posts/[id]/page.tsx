@@ -21,13 +21,16 @@ interface Post {
 
 // 3. Update the data fetching function to use the dynamic baseURL for Vercel compatibility.
 const getPostById = async (id: string) => {
-  const baseURL = process.env.VERCEL_URL
-    ? `https://` + process.env.VERCEL_URL
-    : 'http://localhost:3000';
+  // const baseURL = process.env.VERCEL_URL
+  //   ? `https://` + process.env.VERCEL_URL
+  //   : 'http://localhost:3000';
+
+    // NEXT_PUBLIC_BASE_URL=https://isrublog.vercel.app
+
  
   try {
-    console.log('this is base urllllllllllll:    '+`${baseURL}/api/posts/${id}`)
-    const res = await fetch(`${baseURL}/api/posts/${id}`);
+    console.log('this is base urllllllllllll:    '+`${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/${id}`)
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/${id}`);
 
     if (!res.ok) {
       return null;
