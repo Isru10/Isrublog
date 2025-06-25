@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import connect from "@/lib/db";
 import Post from "@/lib/models/post";
 import mongoose, { Types } from "mongoose";
+import { ObjectId } from "mongodb";
 
 // Helper to get user ID from token
 const getUserIdFromToken = (request: NextRequest): string | null => {
@@ -34,7 +35,7 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
   }
   try {
     await connect();
-    const post = await Post.findOne({ _id: id });
+    const post = await Post.findOne({ _id: new ObjectId(id) });
 
     if (!post) {
       return NextResponse.json({ message: "Post not found." }, { status: 404 });
