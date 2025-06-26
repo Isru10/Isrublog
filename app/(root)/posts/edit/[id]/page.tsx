@@ -5,7 +5,7 @@ const getPostById = async (id: string) => {
     // const baseURL = process.env.VERCEL_URL
     // ? `https://` + process.env.VERCEL_URL
     // : 'http://localhost:3000';
-
+// changed the url process env variable to NEXT_PUBLIC_BASE_URL 
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/${id}`, {
       cache: 'no-store',
     });
