@@ -28,6 +28,7 @@ const getPostById = async (id: string) => {
     // NEXT_PUBLIC_BASE_URL=https://isrublog.vercel.app
 
  
+    // next base url in env removed previous vercelurl 
   try {
     console.log('this is base urllllllllllll:    '+`${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/${id}`)
     const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/posts/${id}`);
