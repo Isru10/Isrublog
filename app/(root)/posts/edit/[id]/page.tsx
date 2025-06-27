@@ -34,6 +34,7 @@ export default async function EditPost({ params }: { params: { id: string } }) {
   return (
     <main className="max-w-4xl mx-auto p-6 md:p-12">
       <h1 className="text-4xl font-bold mb-8">Edit Post</h1>
+      {/* edit post form for dynamic page */}
       <EditPostForm id={id} title={title} content={content} />
     </main>
   );
